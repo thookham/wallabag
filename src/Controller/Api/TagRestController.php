@@ -41,6 +41,35 @@ class TagRestController extends WallabagRestController
     }
 
     /**
+     * Retrieve tags for suggestions (native browser autocomplete or similar).
+     *
+     * @Operation(
+     *     tags={"Tags"},
+     *     summary="Retrieve tags for suggestions.",
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returned when successful"
+     *     )
+     * )
+     *
+     * @return JsonResponse
+     */
+    #[Route(path: '/api/tags/suggestions.{_format}', name: 'api_get_tag_suggestions', methods: ['GET'], defaults: ['_format' => 'json'])]
+    public function getTagSuggestionsAction(TagRepository $tagRepository)
+    {
+        $this->validateAuthentication();
+
+        $tags = $tagRepository->findAllFlatTagsWithNbEntries($this->getUser()->getId());
+
+        // We only return labels for suggestions
+        $labels = array_column($tags, 'label');
+
+        $json = $this->serializer->serialize($labels, 'json');
+
+        return (new JsonResponse())->setJson($json);
+    }
+
+    /**
      * Permanently remove one tag from **every** entry by passing the Tag label.
      *
      * @Operation(

@@ -7,7 +7,8 @@
         <span class="black-text">{{ form_errors(form.label) }}</span>
     {% endif %}
 
-    {{ form_widget(form.label, {'attr': {'autocomplete': 'off', 'data-add-tag-target': 'input'}}) }}
+    {{ form_widget(form.label, {'attr': {'autocomplete': 'off', 'data-add-tag-target': 'input', 'list': 'tag-suggestions'}}) }}
+    <datalist id="tag-suggestions" data-add-tag-target="suggestions"></datalist>
 
     {{ form_widget(form.add, {'attr': {'class': 'btn waves-effect waves-light tags-add-form-submit'}}) }}
     {{ form_widget(form._token) }}
